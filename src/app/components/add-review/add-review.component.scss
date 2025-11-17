@@ -1,0 +1,93 @@
+.add-review {
+  .add-review-header {
+    .write-review-btn {
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      svg {
+        transition: transform 0.2s ease;
+      }
+
+      &:hover svg {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .review-form-container {
+    .review-form {
+      .form-group {
+        .rating-input {
+          .star {
+            transition: all 0.2s ease;
+
+            &:hover {
+              transform: scale(1.2);
+            }
+          }
+        }
+
+        input, textarea {
+          transition: all 0.2s ease;
+
+          &:focus {
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+          }
+
+          &.border-red-500 {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+          }
+        }
+
+        .error-message {
+          animation: slideIn 0.2s ease;
+        }
+      }
+
+      .form-actions {
+        .submit-btn, .cancel-btn {
+          transition: all 0.2s ease;
+
+          &:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+          }
+        }
+
+        .submit-btn {
+          .animate-spin {
+            animation: spin 1s linear infinite;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

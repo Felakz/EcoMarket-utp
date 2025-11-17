@@ -1,0 +1,101 @@
+.admin-product-form {
+  .form-header {
+    h1 {
+      color: #1f2937;
+    }
+
+    p {
+      color: #6b7280;
+    }
+  }
+
+  .loading {
+    .animate-spin {
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  .product-form {
+    .form-group {
+      input, select, textarea {
+        transition: all 0.2s ease;
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        &.border-red-500 {
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .error-message {
+        animation: slideIn 0.2s ease;
+      }
+    }
+
+    .image-preview {
+      img {
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+      }
+    }
+
+    .tags-grid {
+      .tag-button {
+        transition: all 0.2s ease;
+        border: 1px solid;
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+      }
+    }
+
+    .form-actions {
+      .submit-btn, .cancel-btn {
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+
+      .submit-btn {
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

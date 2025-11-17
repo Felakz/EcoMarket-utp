@@ -1,0 +1,67 @@
+.product-reviews {
+  .reviews-header {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1rem;
+  }
+
+  .rating-summary {
+    .average-rating {
+      .stars {
+        span {
+          transition: color 0.2s ease;
+        }
+      }
+    }
+  }
+
+  .reviews-list {
+    .loading {
+      .animate-spin {
+        animation: spin 1s linear infinite;
+      }
+    }
+
+    .reviews-container {
+      .review-card {
+        transition: box-shadow 0.2s ease;
+
+        &:hover {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-header {
+          .user-info {
+            .rating {
+              span {
+                transition: color 0.2s ease;
+              }
+            }
+          }
+        }
+
+        .review-actions {
+          .helpful-btn {
+            transition: all 0.2s ease;
+
+            &:hover {
+              transform: translateY(-1px);
+            }
+
+            svg {
+              transition: stroke 0.2s ease;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

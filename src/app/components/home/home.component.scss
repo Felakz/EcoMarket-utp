@@ -1,0 +1,50 @@
+:host{display:block}
+.hero{padding:4rem 2rem;background:linear-gradient(180deg,#f6f9f4, #f1fbff)}
+.hero-inner{max-width:1100px;margin:0 auto;display:flex;gap:2rem;align-items:center}
+.hero-copy{flex:1}
+.hero-copy h2{font-size:1.75rem;margin-bottom:1rem}
+.hero-copy p{color:#697a6b}
+.hero-actions{margin-top:1.25rem;display:flex;gap:1rem}
+.btn{padding:0.75rem 1.25rem;border-radius:999px;text-decoration:none}
+.btn.primary{background:#27c46d;color:white}
+.btn.outline{border:1px solid #27c46d;color:#27c46d;background:transparent}
+.hero-visual{flex:1;display:flex;justify-content:center}
+.image-frame{width:380px;height:380px;border-radius:18px;box-shadow:0 30px 60px rgba(0,0,0,0.06);overflow:hidden}
+.image-frame img{width:100%;height:100%;object-fit:cover}
+.how-it-works{padding:3rem 2rem}
+.how-it-works .steps{display:flex;gap:2rem;justify-content:center;margin-top:1.5rem}
+.step{width:220px;text-align:center}
+.step .icon{width:70px;height:70px;border-radius:50%;background:#eaf8ef;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem}
+.featured{padding:3rem 2rem}
+.featured .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(220px,1fr));gap:1.25rem;max-width:1100px;margin:1rem auto}
+
+// Carousel styles
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+

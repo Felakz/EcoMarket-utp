@@ -1,0 +1,69 @@
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Welcome Header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">¡Bienvenido a EcoMarket!</h1>
+      <p class="text-xl text-gray-600">Has iniciado sesión exitosamente en tu dashboard personal.</p>
+    </div>
+
+    <!-- User Info Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+      <div class="bg-gradient-to-r from-green-500 to-blue-600 px-6 py-4">
+        <h2 class="text-2xl font-bold text-white">Información del usuario</h2>
+      </div>
+      <div class="px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <p class="text-lg text-gray-900">{{ currentUser?.email }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+              <p class="text-lg text-gray-900">{{ currentUser?.firstName || currentUser?.username }} {{ currentUser?.lastName }}</p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                    [class.bg-green-100]="currentUser?.roles?.[0] === 'ROLE_CUSTOMER'"
+                    [class.text-green-800]="currentUser?.roles?.[0] === 'ROLE_CUSTOMER'"
+                    [class.bg-blue-100]="currentUser?.roles?.[0] === 'ROLE_SELLER'"
+                    [class.text-blue-800]="currentUser?.roles?.[0] === 'ROLE_SELLER'"
+                    [class.bg-purple-100]="currentUser?.roles?.[0] === 'ROLE_ADMIN'"
+                    [class.text-purple-800]="currentUser?.roles?.[0] === 'ROLE_ADMIN'">
+                {{ currentUser?.roles?.[0] === 'ROLE_CUSTOMER' ? 'Cliente' : 
+                   currentUser?.roles?.[0] === 'ROLE_SELLER' ? 'Vendedor' : 'Administrador' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="border-t pt-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones rápidas</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a routerLink="/products" class="flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              Ver productos
+            </a>
+            <button (click)="logout()" class="flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

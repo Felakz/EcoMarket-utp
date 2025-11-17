@@ -1,0 +1,56 @@
+<header class="bg-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a routerLink="/" class="text-2xl font-bold text-green-600 hover:text-green-700 transition-colors">
+          🌿 EcoMarket
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex space-x-8">
+        <a routerLink="/" routerLinkActive="text-green-600 font-semibold" class="text-gray-700 hover:text-green-600 transition-colors">Inicio</a>
+        <a routerLink="/products" routerLinkActive="text-green-600 font-semibold" class="text-gray-700 hover:text-green-600 transition-colors">Productos</a>
+        <a routerLink="/categories" routerLinkActive="text-green-600 font-semibold" class="text-gray-700 hover:text-green-600 transition-colors">Categorías</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-4">
+        <a routerLink="/cart" class="relative text-gray-700 hover:text-green-600 transition-colors">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13l-1.1 5M7 13h10m0 0v8a2 2 0 01-2 2H9a2 2 0 01-2-2v-8z" />
+          </svg>
+          <span *ngIf="cartItemCount > 0" class="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {{ cartItemCount }}
+          </span>
+        </a>
+
+        <!-- Authenticated User -->
+        <div *ngIf="isAuthenticated" class="flex items-center space-x-4">
+          <a routerLink="/dashboard" class="text-gray-700 hover:text-green-600 transition-colors">
+            {{ currentUser?.username }}
+          </a>
+          <button (click)="logout()" class="text-gray-700 hover:text-red-600 transition-colors">
+            Cerrar sesión
+          </button>
+        </div>
+
+        <!-- Unauthenticated User -->
+        <div *ngIf="!isAuthenticated" class="flex items-center space-x-4">
+          <a routerLink="/login" class="text-gray-700 hover:text-green-600 transition-colors hidden sm:block">Iniciar sesión</a>
+          <a routerLink="/register" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">Registrarse</a>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button class="text-gray-700 hover:text-green-600 focus:outline-none focus:text-green-600">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

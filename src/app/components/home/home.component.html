@@ -1,0 +1,110 @@
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-green-100 via-emerald-50 to-teal-100 text-gray-800 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="text-center lg:text-left">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 text-green-800">
+          Marketplace Sostenible para Productos Reciclados
+        </h1>
+        <p class="text-xl mb-8 text-gray-700">
+          Compra y vende productos únicos creados a partir de materiales reciclados. Juntos construimos un futuro más verde.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <a routerLink="/products" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+            Explorar productos
+          </a>
+          <a routerLink="/register" class="border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-100 transition-colors">
+            Regístrate
+          </a>
+        </div>
+      </div>
+      <div class="text-center">
+        <!-- Image Slider -->
+        <div class="relative bg-white p-8 rounded-2xl shadow-2xl overflow-hidden">
+          <div class="carousel-container relative h-64 md:h-80">
+            <div class="carousel-slide" [class.active]="currentSlide === 0">
+              <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop&crop=center" alt="Productos reciclados" class="w-full h-full object-cover rounded-lg" />
+              <div class="absolute bottom-4 left-4 bg-green-200 bg-opacity-90 px-3 py-1 rounded-lg">
+                <p class="text-green-800 font-semibold">Reciclado Creativo</p>
+              </div>
+            </div>
+            <div class="carousel-slide" [class.active]="currentSlide === 1">
+              <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center" alt="Artesanías ecológicas" class="w-full h-full object-cover rounded-lg" />
+              <div class="absolute bottom-4 left-4 bg-emerald-200 bg-opacity-90 px-3 py-1 rounded-lg">
+                <p class="text-emerald-800 font-semibold">Artesanías Sostenibles</p>
+              </div>
+            </div>
+            <div class="carousel-slide" [class.active]="currentSlide === 2">
+              <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&crop=center" alt="Productos eco-friendly" class="w-full h-full object-cover rounded-lg" />
+              <div class="absolute bottom-4 left-4 bg-teal-200 bg-opacity-90 px-3 py-1 rounded-lg">
+                <p class="text-teal-800 font-semibold">Eco-Friendly Living</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Navigation Buttons -->
+          <button (click)="prevSlide()" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button (click)="nextSlide()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-lg transition-all">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+          
+          <!-- Indicators -->
+          <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            <button *ngFor="let slide of [0,1,2]; let i = index" 
+                    (click)="setSlide(i)" 
+                    class="w-3 h-3 rounded-full transition-all" 
+                    [class.bg-green-600]="currentSlide === i" 
+                    [class.bg-gray-300]="currentSlide !== i">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">¿Cómo funciona?</h2>
+      <p class="text-xl text-gray-600">Tres simples pasos para formar parte de la economía circular</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+        <div class="text-6xl mb-4">♻️</div>
+        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Recicla</h3>
+        <p class="text-gray-600">Transforma tus materiales reciclados en productos únicos y sostenibles.</p>
+      </div>
+      <div class="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+        <div class="text-6xl mb-4">💲</div>
+        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Vende</h3>
+        <p class="text-gray-600">Publica tus creaciones en nuestra plataforma y alcanza miles de compradores.</p>
+      </div>
+      <div class="text-center bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+        <div class="text-6xl mb-4">📦</div>
+        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Reutiliza</h3>
+        <p class="text-gray-600">Contribuye a un mundo más sostenible comprando y vendiendo productos eco-friendly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Productos Destacados</h2>
+      <p class="text-xl text-gray-600">Descubre productos únicos creados con amor por el planeta</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <app-product-card *ngFor="let p of products" [product]="p"></app-product-card>
+    </div>
+  </div>
+</section>

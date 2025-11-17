@@ -1,0 +1,28 @@
+.host{display:block}
+.site-header{
+	background: white;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	height: 64px; /* altura fija para calcular padding-top */
+	display: flex;
+	align-items: center;
+}
+.site-header .container{
+	max-width: 1100px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 1rem;
+	height: 100%;
+}
+.logo{font-weight:700;color:#2aa36b}
+.nav-links a{margin:0 0.75rem;color:#333;text-decoration:none}
+.nav-links a.active{color:#2aa36b}
+.actions a{margin-left:0.75rem;text-decoration:none}
+.btn.primary{background:#2aa36b;color:white;padding:0.5rem 0.9rem;border-radius:999px}
+.login{color:#333}

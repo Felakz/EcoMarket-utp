@@ -1,0 +1,76 @@
+<div class="product-reviews">
+  <div class="reviews-header mb-6">
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">Reseñas de Clientes</h3>
+    <div class="rating-summary flex items-center gap-4">
+      <div class="average-rating flex items-center gap-2">
+        <div class="stars flex">
+          <span *ngFor="let star of getStarArray(averageRating)"
+                class="text-2xl"
+                [class.text-yellow-400]="star <= averageRating"
+                [class.text-gray-300]="star > averageRating">
+            ★
+          </span>
+        </div>
+        <span class="text-lg font-semibold">{{ averageRating.toFixed(1) }}</span>
+      </div>
+      <span class="text-gray-600">({{ reviewCount }} reseñas)</span>
+    </div>
+  </div>
+
+  <div class="reviews-list">
+    <div *ngIf="loading" class="loading text-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+      <p class="text-gray-600 mt-2">Cargando reseñas...</p>
+    </div>
+
+    <div *ngIf="!loading && reviews.length === 0" class="no-reviews text-center py-8">
+      <p class="text-gray-600">Aún no hay reseñas para este producto.</p>
+      <p class="text-sm text-gray-500 mt-1">¡Sé el primero en compartir tu opinión!</p>
+    </div>
+
+    <div *ngIf="!loading && reviews.length > 0" class="reviews-container space-y-6">
+      <div *ngFor="let review of reviews" class="review-card border border-gray-200 rounded-lg p-6">
+        <div class="review-header flex items-start justify-between mb-4">
+          <div class="user-info">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-semibold text-gray-800">{{ review.userName }}</span>
+              <span *ngIf="review.verified" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                Compra verificada
+              </span>
+            </div>
+            <div class="rating flex items-center gap-1">
+              <span *ngFor="let star of getStarArray(review.rating)"
+                    class="text-lg"
+                    [class.text-yellow-400]="star <= review.rating"
+                    [class.text-gray-300]="star > review.rating">
+                ★
+              </span>
+            </div>
+          </div>
+          <div class="review-date text-sm text-gray-500">
+            {{ review.createdAt | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+
+        <div class="review-content mb-4">
+          <h4 class="font-semibold text-gray-800 mb-2">{{ review.title }}</h4>
+          <p class="text-gray-700 leading-relaxed">{{ review.comment }}</p>
+        </div>
+
+        <div class="review-actions flex items-center justify-between">
+          <button (click)="markHelpful(review.id)"
+                  class="helpful-btn flex items-center gap-1 text-sm text-gray-600 hover:text-green-600 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+            </svg>
+            Útil ({{ review.helpful }})
+          </button>
+
+          <div *ngIf="review.updatedAt && review.updatedAt !== review.createdAt" class="text-xs text-gray-500">
+            Editado
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
