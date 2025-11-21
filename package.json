@@ -10,6 +10,9 @@
     "serve:ssr:frontend-angular": "node dist/frontend-angular/server/server.mjs"
   },
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@angular/animations": "^17.3.0",
     "@angular/common": "^17.3.0",
