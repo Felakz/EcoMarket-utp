@@ -1,0 +1,106 @@
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecomarket-db
+    environment:
+      POSTGRES_DB: ecomarket_db
+      POSTGRES_USER: ecomarket_user
+      POSTGRES_PASSWORD: ecomarket_pass123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database_schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ecomarket-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecomarket_user -d ecomarket_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Backend Spring Boot
+  backend:
+    build:
+      context: ./backend-v2
+      dockerfile: Dockerfile
+    container_name: ecomarket-backend
+    environment:
+      # Database
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecomarket_db
+      SPRING_DATASOURCE_USERNAME: ecomarket_user
+      SPRING_DATASOURCE_PASSWORD: ecomarket_pass123
+      
+      # JPA/Hibernate
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      
+      # JWT
+      JWT_SECRET: ${JWT_SECRET:-ecomarket-super-secret-key-2024-production-change-this-in-aws}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      
+      # File Upload
+      FILE_UPLOAD_DIR: /app/uploads
+      FILE_MAX_SIZE: 10MB
+      
+      # CORS
+      CORS_ALLOWED_ORIGINS: http://localhost,http://localhost:80,http://frontend
+      
+      # Server
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: prod
+      
+      # AWS S3 (opcional - para producción)
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+    ports:
+      - "8080:8080"
+    volumes:
+      - backend_uploads:/app/uploads
+    networks:
+      - ecomarket-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/ecomarket/api/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  # Frontend Angular con Nginx
+  frontend:
+    build:
+      context: ./frontend-angular
+      dockerfile: Dockerfile
+    container_name: ecomarket-frontend
+    ports:
+      - "80:80"
+    networks:
+      - ecomarket-network
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+networks:
+  ecomarket-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local

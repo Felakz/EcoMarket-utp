@@ -25,6 +25,7 @@ export class ProductsComponent implements OnInit {
   minPrice: number = 0;
   maxPrice: number = 100;
   showOnlyAvailable: boolean = false;
+  minEcoRating: number = 0;
 
   constructor(private productsService: ProductsService) {}
 

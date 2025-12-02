@@ -1,6 +1,10 @@
 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer" [routerLink]="['/products', product.id]">
-  <div class="relative">
-    <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+  <div class="relative bg-gray-200">
+    <img 
+      [src]="getImageUrl()" 
+      [alt]="product.name" 
+      class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+      loading="lazy" />
     <div class="absolute top-2 right-2" *ngIf="product.ecoRating >= 4">
       <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">🌿 Eco</span>
     </div>

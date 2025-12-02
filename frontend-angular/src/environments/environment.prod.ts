@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
-  // Replace with your production API URL or configure Vercel env var and set during build.
-  apiUrl: 'https://api.example.com/ecomarket/api'
+  // Para Docker local: usa el servicio backend
+  // Para AWS: reemplaza con tu ALB o API Gateway URL
+  apiUrl: 'http://backend:8080/ecomarket/api'
 };

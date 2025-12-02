@@ -19,6 +19,13 @@ export class ProductDetailComponent implements OnInit {
   quantity: number = 1;
   loading: boolean = true;
 
+  private readonly placeholders: { [key: string]: string } = {
+    'Muebles Ecológicos': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop',
+    'Accesorios Sostenibles': 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=600&fit=crop',
+    'Hogar Eco-Friendly': 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=800&h=600&fit=crop',
+    'default': 'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&h=600&fit=crop'
+  };
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -62,6 +69,24 @@ export class ProductDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/products']);
+  }
+
+  getImageUrl(): string {
+    if (!this.product) {
+      return this.placeholders['default'];
+    }
+    // Si no hay imageFilename, usar placeholder directamente
+    if (!this.product.imageFilename) {
+      return this.placeholders[this.product.categoryName] || this.placeholders['default'];
+    }
+    // Si hay imageFilename, usar la URL del backend
+    return this.product.imageUrl;
+  }
+
+  onImageError(event: Event): void {
+    // Si la imagen falla, usar un placeholder genérico
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&h=600&fit=crop';
   }
 
   onReviewAdded(): void {

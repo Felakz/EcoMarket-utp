@@ -10,16 +10,18 @@ interface ProductResponse {
   name: string;
   description: string;
   price: number;
-  stock: number;
+  stockQuantity: number;
   categoryId: number;
   categoryName: string;
   imageFilename: string | null;
-  imageUrl: string | null;
   isOrganic: boolean;
   certifications: string | null;
   originCountry: string | null;
-  createdAt: string;
-  updatedAt: string;
+  carbonFootprint: number | null;
+  isActive: boolean;
+  isFeatured: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 @Injectable({
@@ -40,14 +42,12 @@ export class ProductsService {
   }
 
   private loadProducts(): void {
-    this.http.get<{ content: ProductResponse[] }>(this.API_URL, {
-      params: new HttpParams().set('size', '100')
-    }).pipe(
+    this.http.get<ProductResponse[]>(this.API_URL).pipe(
       catchError((error) => {
         console.error('Error loading products:', error);
-        return of({ content: [] });
+        return of([]);
       }),
-      map((response: { content: ProductResponse[] }) => response.content.map(this.mapToProduct.bind(this)))
+      map((response: ProductResponse[]) => response.map(this.mapToProduct.bind(this)))
     ).subscribe((products: Product[]) => {
       this.products = products;
       this.productsSubject.next([...this.products]);
@@ -55,14 +55,12 @@ export class ProductsService {
   }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<{ content: ProductResponse[] }>(this.API_URL, {
-      params: new HttpParams().set('size', '100')
-    }).pipe(
+    return this.http.get<ProductResponse[]>(this.API_URL).pipe(
       catchError((error) => {
         console.error('Error getting products:', error);
-        return of({ content: [] });
+        return of([]);
       }),
-      map((response: { content: ProductResponse[] }) => response.content.map(this.mapToProduct.bind(this)))
+      map((response: ProductResponse[]) => response.map(this.mapToProduct.bind(this)))
     );
   }
 
@@ -77,30 +75,26 @@ export class ProductsService {
   }
 
   getProductsByCategory(categoryName: string): Observable<Product[]> {
-    return this.http.get<{ content: ProductResponse[] }>(this.API_URL, {
-      params: new HttpParams()
-        .set('category', categoryName)
-        .set('size', '100')
+    return this.http.get<ProductResponse[]>(this.API_URL, {
+      params: new HttpParams().set('category', categoryName)
     }).pipe(
       catchError((error) => {
         console.error('Error getting products by category:', error);
-        return of({ content: [] });
+        return of([]);
       }),
-      map((response: { content: ProductResponse[] }) => response.content.map(this.mapToProduct.bind(this)))
+      map((response: ProductResponse[]) => response.map(this.mapToProduct.bind(this)))
     );
   }
 
   searchProducts(query: string): Observable<Product[]> {
-    return this.http.get<{ content: ProductResponse[] }>(this.API_URL, {
-      params: new HttpParams()
-        .set('search', query)
-        .set('size', '100')
+    return this.http.get<ProductResponse[]>(`${this.API_URL}/search`, {
+      params: new HttpParams().set('keyword', query)
     }).pipe(
       catchError((error) => {
         console.error('Error searching products:', error);
-        return of({ content: [] });
+        return of([]);
       }),
-      map((response: { content: ProductResponse[] }) => response.content.map(this.mapToProduct.bind(this)))
+      map((response: ProductResponse[]) => response.map(this.mapToProduct.bind(this)))
     );
   }
 
@@ -113,16 +107,24 @@ export class ProductsService {
   }
 
   private mapToProduct(response: ProductResponse): Product {
-    const imageUrl = response.imageUrl || (response.imageFilename
+    // URL placeholder basado en la categoría del producto
+    const placeholders: { [key: string]: string } = {
+      'Muebles Ecológicos': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
+      'Accesorios Sostenibles': 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop',
+      'Hogar Eco-Friendly': 'https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=400&h=300&fit=crop',
+      'default': 'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=400&h=300&fit=crop'
+    };
+
+    const imageUrl = response.imageFilename
       ? `${environment.apiUrl.replace(/\/+$/, '')}/images/${response.imageFilename}`
-      : 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop');
-    
+      : (placeholders[response.categoryName] || placeholders['default']);
+
     return {
       id: response.id,
       name: response.name,
       description: response.description,
       price: response.price,
-      stock: response.stock,
+      stock: response.stockQuantity,
       categoryId: response.categoryId,
       categoryName: response.categoryName,
       imageFilename: response.imageFilename,
@@ -130,8 +132,8 @@ export class ProductsService {
       isOrganic: response.isOrganic,
       certifications: response.certifications,
       originCountry: response.originCountry,
-      createdAt: new Date(response.createdAt),
-      updatedAt: new Date(response.updatedAt)
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
   }
 
@@ -168,24 +170,27 @@ export class ProductsService {
     return of(true);
   }
 
-  private mapToProductResponse(product: Product) {
+  private mapToProductResponse(product: Product): ProductResponse {
+    const toIsoString = (value: string | Date) => new Date(value).toISOString();
     // Minimal mapping for fallback/mock usage
     return {
       id: product.id,
       name: product.name,
       description: product.description,
       price: product.price,
-      stock: product.stock,
+      stockQuantity: product.stock,
       categoryId: product.categoryId ?? 0,
       categoryName: product.categoryName ?? product.category ?? '',
       imageFilename: product.imageFilename ?? null,
-      imageUrl: product.imageUrl ?? null,
       isOrganic: product.isOrganic ?? false,
       certifications: product.certifications ?? null,
       originCountry: product.originCountry ?? null,
-      createdAt: product.createdAt.toISOString(),
-      updatedAt: product.updatedAt.toISOString(),
-    } as ProductResponse;
+      carbonFootprint: product.carbonFootprint ?? null,
+      isActive: true,
+      isFeatured: false,
+      createdAt: toIsoString(product.createdAt),
+      updatedAt: toIsoString(product.updatedAt),
+    };
   }
 }
 

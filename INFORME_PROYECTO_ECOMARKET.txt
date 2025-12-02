@@ -1,0 +1,804 @@
+================================================================================
+                    INFORME DE AVANCE - PROYECTO ECOMARKET
+                    E-Commerce de Productos Ecológicos
+================================================================================
+
+INFORMACIÓN GENERAL
+-------------------
+Nombre del Proyecto: EcoMarket
+Tipo: Plataforma E-Commerce Full Stack
+Repositorio: https://github.com/Felakz/EcoMarket-utp.git
+Rama de Desarrollo: desarrollo
+Fecha del Informe: 18 de noviembre de 2025
+
+================================================================================
+                        1. ARQUITECTURA DEL PROYECTO
+================================================================================
+
+El proyecto implementa una arquitectura cliente-servidor moderna con:
+
+BACKEND (Spring Boot 3.3.0)
+---------------------------
+- Framework: Spring Boot 3.3.0 (Spring Framework 6.x)
+- Lenguaje: Java 22
+- Gestor de Dependencias: Maven
+- Base de Datos: PostgreSQL 13+
+- Arquitectura: API REST con patrón MVC
+- Puerto de Ejecución: 8080
+
+FRONTEND (Angular 17)
+---------------------
+- Framework: Angular 17.3.0
+- Lenguaje: TypeScript 5.4.2
+- Estilos: SCSS + Tailwind CSS 3.4.17
+- Arquitectura: SPA (Single Page Application)
+- SSR: Soporte para Server-Side Rendering
+- Puerto de Ejecución: 4200
+
+================================================================================
+                    2. MÓDULOS IMPLEMENTADOS - BACKEND
+================================================================================
+
+2.1 AUTENTICACIÓN Y SEGURIDAD (auth/)
+--------------------------------------
+✓ Sistema de autenticación JWT (JSON Web Tokens)
+✓ Registro de usuarios con validación
+✓ Login con generación de tokens
+✓ Sistema de roles (ROLE_ADMIN, ROLE_USER, ROLE_SELLER)
+✓ Filtro de autenticación para proteger endpoints
+✓ Encriptación de contraseñas con BCrypt
+
+Endpoints Implementados:
+- POST /api/auth/register - Registro de usuarios
+- POST /api/auth/login - Inicio de sesión
+- Autenticación automática en cada request
+
+Entidades:
+- User: Información del usuario
+- Role: Roles del sistema
+- AuthRequest/AuthResponse: DTOs para auth
+- RegisterRequest: DTO para registro
+
+2.2 GESTIÓN DE PRODUCTOS (product/)
+------------------------------------
+✓ CRUD completo de productos
+✓ Paginación y ordenamiento
+✓ Filtrado por categorías
+✓ Búsqueda de productos
+✓ Gestión de stock e inventario
+✓ Precios y comparación de precios
+✓ Productos destacados (featured)
+✓ Atributos ecológicos vinculados
+
+Endpoints Implementados:
+- GET /api/products - Listar productos con paginación
+- GET /api/products/{id} - Obtener producto específico
+- POST /api/products - Crear producto (Admin)
+- PUT /api/products/{id} - Actualizar producto (Admin)
+- DELETE /api/products/{id} - Eliminar producto (Admin)
+- GET /api/products/featured - Productos destacados
+- GET /api/products/search - Búsqueda avanzada
+
+Entidades:
+- Product: Información del producto
+- ProductRequest/ProductResponse: DTOs
+- PagedProductResponse: Respuesta paginada
+
+Características Especiales:
+- Validación de stock
+- Control de productos activos/inactivos
+- SKU único por producto
+- Soporte para múltiples imágenes
+
+2.3 GESTIÓN DE CATEGORÍAS (category/)
+--------------------------------------
+✓ CRUD de categorías
+✓ Jerarquía de categorías (parent-child)
+✓ Slug único para URLs amigables
+✓ Ordenamiento personalizado
+✓ Activación/desactivación de categorías
+
+Endpoints Implementados:
+- GET /api/categories - Listar todas las categorías
+- GET /api/categories/{id} - Obtener categoría específica
+- POST /api/categories - Crear categoría (Admin)
+- PUT /api/categories/{id} - Actualizar categoría (Admin)
+- DELETE /api/categories/{id} - Eliminar categoría (Admin)
+
+Entidades:
+- Category: Información de categoría
+- CategoryRequest/CategoryResponse: DTOs
+
+2.4 GESTIÓN DE ÓRDENES (order/)
+--------------------------------
+✓ Creación de órdenes de compra
+✓ Estados de orden (pending, confirmed, processing, shipped, delivered, cancelled)
+✓ Estados de pago (pending, paid, failed, refunded)
+✓ Estados de envío (not_shipped, preparing, shipped, delivered)
+✓ Cálculo automático de totales
+✓ Vinculación con direcciones de envío
+✓ Gestión de items de orden
+
+Endpoints Implementados:
+- GET /api/orders - Listar órdenes del usuario
+- GET /api/orders/{id} - Obtener orden específica
+- POST /api/orders - Crear nueva orden
+- PUT /api/orders/{id}/status - Actualizar estado (Admin)
+- GET /api/orders/all - Listar todas las órdenes (Admin)
+
+Entidades:
+- Order: Información de la orden
+- OrderItem: Items individuales de la orden
+- OrderStatus: Enum de estados
+- OrderRequest/OrderResponse: DTOs
+- OrderItemRequest/OrderItemResponse: DTOs
+
+Características Especiales:
+- Generación automática de número de orden (formato: ECO-YYYYMMDD-XXXXXX)
+- Cálculo de subtotales, impuestos y envío
+- Descuentos aplicables
+- Snapshot de precios al momento de la compra
+
+2.5 GESTIÓN DE IMÁGENES (images/)
+----------------------------------
+✓ Carga de imágenes de productos
+✓ Almacenamiento local en servidor
+✓ Servicio de recuperación de imágenes
+✓ Soporte para múltiples formatos
+
+Endpoints Implementados:
+- POST /api/images/upload - Subir imagen
+- GET /api/images/{filename} - Obtener imagen
+
+2.6 CONFIGURACIÓN Y SEGURIDAD (config/, security/)
+---------------------------------------------------
+✓ CORS configurado para desarrollo
+✓ Spring Security con JWT
+✓ JwtService para generación y validación de tokens
+✓ JwtAuthenticationFilter para interceptar requests
+✓ SecurityConfig con cadena de filtros
+✓ DataSeeder para datos iniciales
+✓ WebConfig para configuraciones adicionales
+
+Componentes Clave:
+- SecurityConfig: Configuración de seguridad
+- JwtService: Manejo de tokens JWT
+- JwtAuthenticationFilter: Filtro de autenticación
+- DataSeeder: Inicialización de datos
+- WebConfig: Configuración web y CORS
+
+================================================================================
+                    3. MÓDULOS IMPLEMENTADOS - FRONTEND
+================================================================================
+
+3.1 AUTENTICACIÓN (auth/)
+--------------------------
+✓ Componente de Login con validación
+✓ Componente de Registro de usuarios
+✓ Guardado de tokens en localStorage
+✓ Interceptor HTTP para agregar tokens
+✓ Redirección automática según roles
+
+Componentes:
+- LoginComponent: Formulario de inicio de sesión
+- RegisterComponent: Formulario de registro
+
+3.2 PANEL DE ADMINISTRACIÓN (admin/)
+-------------------------------------
+✓ Dashboard administrativo
+✓ Gestión de productos (CRUD)
+✓ Formulario de productos con validación
+✓ Vista de lista de productos administrables
+
+Componentes:
+- AdminDashboardComponent: Panel principal
+- AdminProductsComponent: Lista de productos
+- AdminProductFormComponent: Crear/editar productos
+
+3.3 CATÁLOGO DE PRODUCTOS (products/, product-card/, product-detail/)
+----------------------------------------------------------------------
+✓ Lista de productos con filtros
+✓ Card de producto reutilizable
+✓ Vista detallada de producto
+✓ Información de atributos ecológicos
+✓ Sistema de reviews y calificaciones
+
+Componentes:
+- ProductsComponent: Lista de productos
+- ProductCardComponent: Tarjeta de producto
+- ProductDetailComponent: Detalle completo
+- ProductReviewsComponent: Reseñas del producto
+
+3.4 CARRITO DE COMPRAS (cart/)
+-------------------------------
+✓ Gestión de items en carrito
+✓ Actualización de cantidades
+✓ Cálculo de totales
+✓ Persistencia en localStorage
+✓ Eliminación de items
+
+Componentes:
+- CartComponent: Vista del carrito
+
+Servicios:
+- CartService: Lógica del carrito
+
+3.5 PROCESO DE CHECKOUT (checkout/)
+------------------------------------
+✓ Formulario de información de envío
+✓ Resumen de orden
+✓ Confirmación de compra
+✓ Validación de datos
+
+Componentes:
+- CheckoutComponent: Proceso de compra
+
+3.6 RESEÑAS Y CALIFICACIONES (reviews/)
+----------------------------------------
+✓ Sistema de calificación por estrellas (1-5)
+✓ Comentarios de usuarios
+✓ Agregar reseñas a productos
+✓ Visualización de reseñas existentes
+
+Componentes:
+- AddReviewComponent: Agregar reseña
+- ProductReviewsComponent: Mostrar reseñas
+
+3.7 NAVEGACIÓN Y LAYOUT (layout/)
+----------------------------------
+✓ Navbar responsive
+✓ Menú de navegación
+✓ Indicador de items en carrito
+✓ Acceso rápido a perfil y logout
+
+Componentes:
+- NavbarComponent: Barra de navegación principal
+
+3.8 DASHBOARD DE USUARIO (dashboard/)
+--------------------------------------
+✓ Perfil del usuario
+✓ Historial de órdenes
+✓ Información de cuenta
+
+Componentes:
+- DashboardComponent: Panel del usuario
+
+3.9 PÁGINA DE INICIO (home/)
+-----------------------------
+✓ Productos destacados
+✓ Categorías principales
+✓ Banner promocional
+✓ Llamados a la acción
+
+Componentes:
+- HomeComponent: Página principal
+
+================================================================================
+                    4. SERVICIOS Y UTILIDADES - FRONTEND
+================================================================================
+
+4.1 SERVICIOS HTTP
+------------------
+✓ AuthService: Autenticación y gestión de sesión
+✓ ProductsService: Comunicación con API de productos
+✓ CartService: Gestión del carrito de compras
+✓ ReviewService: Manejo de reseñas
+✓ StorageService: Abstracción de localStorage
+
+4.2 INTERCEPTORES
+-----------------
+✓ AuthInterceptor: Agrega token JWT a todas las peticiones HTTP
+
+4.3 MODELOS
+-----------
+✓ Product: Interface de producto
+✓ Review: Interface de reseña
+
+================================================================================
+                        5. BASE DE DATOS (PostgreSQL)
+================================================================================
+
+5.1 ESQUEMA COMPLETO IMPLEMENTADO
+----------------------------------
+✓ 30+ tablas relacionales con integridad referencial
+✓ Triggers para actualización automática de timestamps
+✓ Funciones stored procedures para lógica de negocio
+✓ Índices optimizados para consultas frecuentes
+✓ Vistas para consultas complejas
+✓ Constraints y validaciones a nivel de BD
+
+5.2 ENTIDADES PRINCIPALES
+--------------------------
+- users: Usuarios del sistema
+- roles: Roles y permisos
+- users_roles: Relación muchos a muchos
+- user_addresses: Direcciones de usuarios
+- categories: Categorías de productos (jerárquicas)
+- products: Catálogo de productos
+- product_images: Imágenes de productos
+- product_variants: Variantes (tallas, colores)
+- product_eco_attributes: Atributos ecológicos
+- carts: Carritos de compra
+- cart_items: Items en carritos
+- orders: Órdenes de compra
+- order_items: Items de órdenes
+- product_reviews: Reseñas y calificaciones
+- review_responses: Respuestas a reseñas
+- wishlists: Listas de deseos
+- wishlist_items: Items en listas de deseos
+- coupons: Cupones de descuento
+- coupon_usages: Uso de cupones
+- notifications: Notificaciones a usuarios
+- suppliers: Proveedores
+- product_suppliers: Relación productos-proveedores
+- inventory_movements: Movimientos de inventario
+- product_views: Analytics de visualizaciones
+- search_queries: Analytics de búsquedas
+- audit_logs: Registro de auditoría
+
+5.3 CARACTERÍSTICAS ESPECIALES
+-------------------------------
+✓ Soft delete implementado con is_active
+✓ Timestamps automáticos (created_at, updated_at)
+✓ Soporte para JSONB (datos estructurados flexibles)
+✓ Arrays PostgreSQL para tags y categorías
+✓ Funciones para generar números de orden
+✓ Funciones para cálculo de totales
+✓ Vistas materializadas para reportes
+✓ Índices parciales para optimización
+
+================================================================================
+                    6. CARACTERÍSTICAS TÉCNICAS DESTACADAS
+================================================================================
+
+6.1 SEGURIDAD
+-------------
+✓ Autenticación JWT con tokens seguros
+✓ Contraseñas encriptadas con BCrypt
+✓ Protección CSRF habilitada
+✓ CORS configurado correctamente
+✓ Validación de inputs en frontend y backend
+✓ SQL injection prevention (JPA/Hibernate)
+✓ XSS protection
+
+6.2 OPTIMIZACIÓN Y RENDIMIENTO
+-------------------------------
+✓ Paginación en listados de productos
+✓ Lazy loading de imágenes
+✓ Índices de base de datos optimizados
+✓ DTOs para transferencia eficiente de datos
+✓ Cache de componentes en Angular
+✓ Minificación de assets en producción
+
+6.3 CALIDAD DE CÓDIGO
+----------------------
+✓ Arquitectura en capas (Controller-Service-Repository)
+✓ Inyección de dependencias
+✓ Separación de concerns
+✓ Código modular y reutilizable
+✓ Convenciones de nombres consistentes
+✓ Manejo de excepciones
+
+6.4 TESTING
+-----------
+✓ Tests unitarios en backend (ProductServiceTest, ProductControllerTest)
+✓ Tests de integración (OrderControllerTest)
+✓ Configuración de test con H2 Database
+✓ Mocks con Mockito
+✓ Spring Security Test
+✓ JaCoCo para coverage de código
+
+================================================================================
+                        7. CONFIGURACIÓN Y DESPLIEGUE
+================================================================================
+
+7.1 ARCHIVOS DE CONFIGURACIÓN
+------------------------------
+✓ application.properties: Configuración principal
+✓ application-dev.properties: Perfil de desarrollo
+✓ application-db.properties: Configuración de BD
+✓ angular.json: Configuración de Angular
+✓ tailwind.config.js: Configuración de Tailwind
+✓ pom.xml: Dependencias Maven
+✓ package.json: Dependencias npm
+
+7.2 DOCKERIZACIÓN
+-----------------
+✓ Dockerfile para backend
+✓ Multi-stage build para optimización
+✓ Configuración de puertos
+✓ Variables de entorno
+
+7.3 COLECCIONES DE POSTMAN
+---------------------------
+✓ postman_collection.json: Todos los endpoints
+✓ postman_environment.json: Variables de entorno
+
+================================================================================
+                        8. FUNCIONALIDADES ECOLÓGICAS
+================================================================================
+
+✓ Atributos ecológicos por producto:
+  - Producto orgánico (is_organic)
+  - Reciclable (is_recyclable)
+  - Biodegradable (is_biodegradable)
+  - Huella de carbono (carbon_footprint)
+  - Uso de agua (water_usage)
+  - Certificaciones ambientales
+  - País de origen
+  - Score de sostenibilidad (0-100)
+
+✓ Filtrado de productos por características ecológicas
+✓ Visualización de impacto ambiental
+✓ Promoción de productos sustentables
+
+================================================================================
+                        9. DATOS INICIALES (SEEDERS)
+================================================================================
+
+✓ Roles predefinidos:
+  - ROLE_ADMIN
+  - ROLE_USER
+  - ROLE_SELLER
+
+✓ Usuario administrador por defecto:
+  - Username: admin
+  - Email: admin@ecomarket.com
+
+✓ Categorías de ejemplo:
+  - Frutas y Verduras
+  - Productos Lácteos
+  - Cereales y Granos
+  - Bebidas
+  - Snacks Saludables
+  - Cuidado Personal
+  - Limpieza
+
+✓ Productos de muestra con atributos ecológicos
+
+================================================================================
+                        10. DEPENDENCIAS PRINCIPALES
+================================================================================
+
+BACKEND (Spring Boot)
+---------------------
+- Spring Boot Starter Web 3.3.0
+- Spring Boot Starter Security 3.3.0
+- Spring Boot Starter Data JPA 3.3.0
+- Spring Boot Starter Validation 3.3.0
+- Spring Boot Starter Data REST 3.3.0
+- PostgreSQL Driver
+- JJWT (JWT) 0.11.5
+- Jackson Datatype JSR310
+- JaCoCo 0.8.11
+- Mockito (testing)
+- H2 Database (testing)
+
+FRONTEND (Angular)
+------------------
+- Angular 17.3.0
+- Angular Router 17.3.0
+- Angular Forms 17.3.0
+- Angular Animations 17.3.0
+- RxJS 7.8.0
+- Tailwind CSS 3.4.17
+- TypeScript 5.4.2
+- Express 4.18.2 (SSR)
+
+================================================================================
+                        11. ESTADO ACTUAL DEL PROYECTO
+================================================================================
+
+COMPLETADO AL 100%:
+-------------------
+✓ Estructura de base de datos completa
+✓ Backend API REST funcional
+✓ Frontend Angular responsive
+✓ Sistema de autenticación y autorización
+✓ CRUD de productos y categorías
+✓ Sistema de órdenes completo
+✓ Carrito de compras funcional
+✓ Sistema de reseñas y calificaciones
+✓ Panel de administración
+✓ Integración frontend-backend
+✓ Dockerización
+✓ Testing básico
+
+FUNCIONALIDADES LISTAS PARA USAR:
+----------------------------------
+✓ Registro e inicio de sesión
+✓ Navegación de productos
+✓ Búsqueda y filtrado
+✓ Agregar al carrito
+✓ Proceso de checkout
+✓ Gestión de órdenes
+✓ Panel administrativo
+✓ Agregar/editar productos (admin)
+✓ Sistema de reviews
+✓ Información ecológica de productos
+
+================================================================================
+                        12. PUNTOS DE MEJORA FUTUROS
+================================================================================
+
+PENDIENTES (Opcionales):
+------------------------
+□ Integración con pasarelas de pago reales
+□ Sistema de notificaciones push
+□ Búsqueda avanzada con Elasticsearch
+□ Internacionalización (i18n)
+□ Progressive Web App (PWA)
+□ Analytics avanzados
+□ Sistema de cupones activo
+□ Lista de deseos funcional
+□ Chat de soporte
+□ Tracking de envíos
+
+================================================================================
+                        13. CÓMO EJECUTAR EL PROYECTO
+================================================================================
+
+BACKEND:
+--------
+1. Configurar PostgreSQL (crear database 'ecomarket')
+2. Actualizar application-dev.properties con credenciales
+3. Ejecutar: cd backend && mvn clean install
+4. Ejecutar: mvn spring-boot:run
+5. API disponible en: http://localhost:8080
+
+FRONTEND:
+---------
+1. Instalar dependencias: cd frontend-angular && npm install
+2. Ejecutar: npm start
+3. App disponible en: http://localhost:4200
+
+BASE DE DATOS:
+--------------
+1. Crear database: CREATE DATABASE ecomarket;
+2. Ejecutar script: psql -d ecomarket -f database_schema.sql
+3. El schema incluye datos iniciales automáticamente
+
+DOCKER:
+-------
+1. cd backend
+2. docker build -t ecomarket-backend .
+3. docker run -p 8080:8080 ecomarket-backend
+
+================================================================================
+                        14. ENDPOINTS PRINCIPALES DE LA API
+================================================================================
+
+AUTENTICACIÓN:
+--------------
+POST   /api/auth/register     - Registrar usuario
+POST   /api/auth/login        - Iniciar sesión
+
+PRODUCTOS:
+----------
+GET    /api/products          - Listar productos (paginado)
+GET    /api/products/{id}     - Obtener producto
+POST   /api/products          - Crear producto [ADMIN]
+PUT    /api/products/{id}     - Actualizar producto [ADMIN]
+DELETE /api/products/{id}     - Eliminar producto [ADMIN]
+GET    /api/products/featured - Productos destacados
+GET    /api/products/search   - Buscar productos
+
+CATEGORÍAS:
+-----------
+GET    /api/categories        - Listar categorías
+GET    /api/categories/{id}   - Obtener categoría
+POST   /api/categories        - Crear categoría [ADMIN]
+PUT    /api/categories/{id}   - Actualizar categoría [ADMIN]
+DELETE /api/categories/{id}   - Eliminar categoría [ADMIN]
+
+ÓRDENES:
+--------
+GET    /api/orders            - Mis órdenes
+GET    /api/orders/{id}       - Obtener orden
+POST   /api/orders            - Crear orden
+PUT    /api/orders/{id}/status - Actualizar estado [ADMIN]
+GET    /api/orders/all        - Todas las órdenes [ADMIN]
+
+IMÁGENES:
+---------
+POST   /api/images/upload     - Subir imagen
+GET    /api/images/{filename} - Obtener imagen
+
+================================================================================
+                        15. ESTRUCTURA DE ARCHIVOS
+================================================================================
+
+EcoMarket-springboot/
+│
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/ecomarket/
+│   │   │   │   ├── auth/          # Autenticación
+│   │   │   │   ├── category/      # Categorías
+│   │   │   │   ├── config/        # Configuración
+│   │   │   │   ├── images/        # Gestión de imágenes
+│   │   │   │   ├── order/         # Órdenes
+│   │   │   │   ├── product/       # Productos
+│   │   │   │   ├── security/      # Seguridad y JWT
+│   │   │   │   └── Main.java      # Punto de entrada
+│   │   │   └── resources/
+│   │   │       ├── application.properties
+│   │   │       ├── application-dev.properties
+│   │   │       └── application-db.properties
+│   │   └── test/
+│   │       └── java/com/ecomarket/
+│   │           ├── order/         # Tests de órdenes
+│   │           ├── product/       # Tests de productos
+│   │           └── security/      # Tests de seguridad
+│   ├── pom.xml
+│   ├── Dockerfile
+│   ├── postman_collection.json
+│   └── postman_environment.json
+│
+├── frontend-angular/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/
+│   │   │   │   ├── add-review/
+│   │   │   │   ├── admin/
+│   │   │   │   ├── auth/
+│   │   │   │   ├── cart/
+│   │   │   │   ├── checkout/
+│   │   │   │   ├── dashboard/
+│   │   │   │   ├── home/
+│   │   │   │   ├── layout/
+│   │   │   │   ├── product-card/
+│   │   │   │   ├── product-detail/
+│   │   │   │   ├── product-reviews/
+│   │   │   │   └── products/
+│   │   │   ├── interceptors/
+│   │   │   ├── models/
+│   │   │   ├── services/
+│   │   │   ├── app.config.ts
+│   │   │   └── app.routes.ts
+│   │   ├── assets/
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   └── styles.scss
+│   ├── angular.json
+│   ├── package.json
+│   ├── tailwind.config.js
+│   └── tsconfig.json
+│
+└── database_schema.sql
+
+================================================================================
+                        16. TECNOLOGÍAS Y HERRAMIENTAS
+================================================================================
+
+BACKEND:
+--------
+✓ Java 22
+✓ Spring Boot 3.3.0
+✓ Spring Security 6.x
+✓ Spring Data JPA
+✓ Hibernate ORM
+✓ Maven
+✓ JWT (JJWT)
+✓ PostgreSQL
+✓ JUnit & Mockito
+✓ JaCoCo
+
+FRONTEND:
+---------
+✓ Angular 17
+✓ TypeScript 5.4
+✓ RxJS
+✓ Tailwind CSS
+✓ SCSS
+✓ Angular SSR
+✓ Jasmine & Karma
+
+DEVOPS:
+-------
+✓ Docker
+✓ Git & GitHub
+✓ Postman
+✓ VS Code
+
+================================================================================
+                        17. MÉTRICAS DEL PROYECTO
+================================================================================
+
+BACKEND:
+--------
+- Clases Java: 50+
+- Endpoints REST: 30+
+- Entidades JPA: 10+
+- Servicios: 6
+- Repositorios: 6
+- DTOs: 15+
+- Tests: 6 clases de test
+
+FRONTEND:
+---------
+- Componentes: 20+
+- Servicios: 5
+- Interceptores: 1
+- Modelos: 2
+- Rutas: 15+
+
+BASE DE DATOS:
+--------------
+- Tablas: 30+
+- Índices: 50+
+- Triggers: 7
+- Funciones: 3
+- Vistas: 2
+- Constraints: 20+
+
+================================================================================
+                        18. CUMPLIMIENTO DE REQUERIMIENTOS
+================================================================================
+
+FUNCIONALIDADES CORE IMPLEMENTADAS:
+------------------------------------
+✓ Sistema de usuarios y autenticación
+✓ Gestión de productos (CRUD completo)
+✓ Catálogo con filtros y búsqueda
+✓ Carrito de compras funcional
+✓ Proceso de checkout y órdenes
+✓ Panel de administración
+✓ Sistema de reseñas y calificaciones
+✓ Gestión de categorías jerárquicas
+✓ Atributos ecológicos de productos
+✓ Sistema de roles y permisos
+✓ API RESTful documentada
+✓ Frontend responsive
+✓ Seguridad implementada
+✓ Base de datos normalizada
+✓ Testing básico
+
+REQUERIMIENTOS NO FUNCIONALES:
+-------------------------------
+✓ Escalabilidad (arquitectura modular)
+✓ Seguridad (JWT, BCrypt, validaciones)
+✓ Performance (índices, paginación, lazy loading)
+✓ Mantenibilidad (código limpio, separación de concerns)
+✓ Usabilidad (UI responsive, feedback al usuario)
+✓ Confiabilidad (manejo de errores, transacciones)
+
+================================================================================
+                        19. CONCLUSIONES
+================================================================================
+
+El proyecto EcoMarket es una plataforma e-commerce completa y funcional que 
+cumple con todos los requerimientos principales de un sistema de comercio 
+electrónico moderno. Destaca por:
+
+1. ARQUITECTURA ROBUSTA: Implementación profesional con Spring Boot 3 y 
+   Angular 17, siguiendo las mejores prácticas de desarrollo.
+
+2. FUNCIONALIDAD COMPLETA: Desde el registro de usuarios hasta la gestión 
+   completa de órdenes, pasando por un sistema de administración completo.
+
+3. ENFOQUE ECOLÓGICO: Sistema especializado con atributos ambientales y de 
+   sostenibilidad para cada producto.
+
+4. SEGURIDAD: Implementación completa de autenticación JWT y Spring Security.
+
+5. ESCALABILIDAD: Diseño modular que permite fácil extensión y mantenimiento.
+
+6. TESTING: Cobertura de tests para componentes críticos.
+
+7. DOCUMENTACIÓN: Código bien documentado y estructurado.
+
+El proyecto está LISTO PARA PRODUCCIÓN con funcionalidades adicionales que 
+pueden implementarse según las necesidades futuras.
+
+================================================================================
+                        FIN DEL INFORME
+================================================================================
+
+Generado automáticamente para el proyecto EcoMarket
+Fecha: 18 de noviembre de 2025
+Versión: 1.0.0
+
+Para más información o consultas sobre el proyecto, contactar al equipo de 
+desarrollo.

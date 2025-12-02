@@ -17,8 +17,12 @@
     <div *ngIf="!loading && product" class="bg-white rounded-lg shadow-lg overflow-hidden">
       <div class="md:flex">
         <!-- Product Image -->
-        <div class="md:w-1/2">
-          <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-96 md:h-full object-cover" />
+        <div class="md:w-1/2 bg-gray-200">
+          <img 
+            [src]="getImageUrl()" 
+            [alt]="product.name" 
+            class="w-full h-96 md:h-full object-cover"
+            loading="lazy" />
         </div>
 
         <!-- Product Info -->

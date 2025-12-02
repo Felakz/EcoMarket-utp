@@ -1,3 +1,26 @@
+# Dependencias
+node_modules/
+
+# Build
+dist/
+build/
+
+# Angular / IDE
+.angular/
+.vscode/
+
+# Environment files
+.env
+.env.*
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+coverage/
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
